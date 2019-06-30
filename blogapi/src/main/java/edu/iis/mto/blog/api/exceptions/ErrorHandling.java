@@ -29,7 +29,7 @@ public class ErrorHandling {
     public void domainError(DomainError exc, HttpServletResponse response) throws IOException {
         LOGGER.error(exc.getMessage());
 
-        if(exc.getMessage().equals(DomainError.USER_NOT_UNCONFIRMED_TRY_CREATE_POST))
+        if(exc.getMessage().equals(DomainError.USER_NOT_CONFIRMED) || exc.getMessage().equals(DomainError.USER_NOT_UNCONFIRMED_TRY_CREATE_POST))
             response.sendError(HttpStatus.FORBIDDEN.value(), exc.getMessage());
         else
             response.sendError(HttpStatus.BAD_REQUEST.value(), exc.getMessage());
