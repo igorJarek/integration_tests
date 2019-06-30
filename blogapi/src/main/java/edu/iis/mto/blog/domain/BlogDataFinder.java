@@ -17,6 +17,7 @@ import edu.iis.mto.blog.dto.PostData;
 import edu.iis.mto.blog.dto.UserData;
 import edu.iis.mto.blog.mapper.BlogDataMapper;
 import edu.iis.mto.blog.services.DataFinder;
+import edu.iis.mto.blog.domain.model.AccountStatus;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -56,6 +57,10 @@ public class BlogDataFinder extends DomainService implements DataFinder {
     public List<PostData> getUserPosts(Long userId) {
         User user = userRepository.findById(userId)
                                   .orElseThrow(domainError(DomainError.USER_NOT_FOUND));
+
+        if(user.getAccountStatus().name().equals(AccountStatus.REMOVED.name()))
+            throw new DomainError(DomainError.USER_NOT_FOUND);
+
         List<BlogPost> posts = blogPostRepository.findByUser(user);
         return posts.stream()
                     .map(mapper::mapToDto)
