@@ -42,4 +42,19 @@ public class CreateUserTest extends FunctionalTests {
                    .post(USER_API);
 
     }
+
+    @Test
+    public void postFormWithExistingUser_ShouldReturnStatusConflict() {
+        JSONObject jsonObj = new JSONObject().put("email", "john@domain.com");
+        RestAssured.given()
+                   .accept(ContentType.JSON)
+                   .header("Content-Type", "application/json;charset=UTF-8")
+                   .body(jsonObj.toString())
+                   .expect()
+                   .log()
+                   .all()
+                   .statusCode(HttpStatus.SC_CONFLICT)
+                   .when()
+                   .post(USER_API);
+    }
 }
